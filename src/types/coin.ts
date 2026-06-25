@@ -16,10 +16,14 @@ export interface Coin {
   };
 }
 
-export interface CoinDetail extends Coin {
+export interface CoinDetail extends Omit<Coin, "image"> {
+  image: { thumb: string; small: string; large: string };
   description: { en: string };
   market_data: {
     current_price: { usd: number };
+    market_cap: { usd: number };
+    total_volume: { usd: number };
+    price_change_percentage_24h: number;
     price_change_percentage_7d: number;
     price_change_percentage_30d: number;
     ath: { usd: number };

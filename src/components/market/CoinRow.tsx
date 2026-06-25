@@ -11,7 +11,9 @@ export default function CoinRow({ coin }: CoinRowProps) {
 
   return (
     <tr className="bg-surface transition-colors hover:bg-surface-2">
-      <td className="px-4 py-3 text-secondary">{coin.market_cap_rank}</td>
+      <td className="hidden px-4 py-3 text-secondary sm:table-cell">
+        {coin.market_cap_rank}
+      </td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           <Image
@@ -27,10 +29,15 @@ export default function CoinRow({ coin }: CoinRowProps) {
           </div>
         </div>
       </td>
-      <td className="px-4 py-3 text-right font-medium text-primary">
-        {formatPrice(coin.current_price)}
-      </td>
       <td className="px-4 py-3 text-right">
+        <p className="font-medium text-primary">
+          {formatPrice(coin.current_price)}
+        </p>
+        <p className={cn("text-xs sm:hidden", isPositive ? "text-up" : "text-down")}>
+          {formatPercent(coin.price_change_percentage_24h)}
+        </p>
+      </td>
+      <td className="hidden px-4 py-3 text-right sm:table-cell">
         <span
           className={cn("font-medium", isPositive ? "text-up" : "text-down")}
         >

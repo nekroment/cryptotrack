@@ -3,17 +3,20 @@ import { notFound } from "next/navigation";
 
 import { TrendingDown, TrendingUp } from "lucide-react";
 
+import { getBinanceChart } from "@/lib/binance";
 import { getCoinDetail, getCoinChart } from "@/lib/coingecko";
 import { formatLargeNumber, formatPercent, formatPrice } from "@/lib/utils";
 import StatCard from "@/components/ui/StatCard";
 import PriceChart from "./PriceChart";
+import LivePrice from "./LivePrice";
 
 export default async function CoinDetail({ id }: { id: string }) {
-  const [coin, initialChart] = await Promise.all([
-    getCoinDetail(id),
-    getCoinChart(id, 7).catch(() => null),
-  ]);
+  const coin = await getCoinDetail(id);
   if (!coin) notFound();
+
+  const initialChart =
+    (await getBinanceChart(coin.symbol, 7).catch(() => null)) ??
+    (await getCoinChart(id, 7).catch(() => null));
 
   const change24h = coin.market_data.price_change_percentage_24h ?? 0;
   const change7d = coin.market_data.price_change_percentage_7d ?? 0;
@@ -40,9 +43,7 @@ export default async function CoinDetail({ id }: { id: string }) {
               #{coin.market_cap_rank}
             </span>
           </div>
-          <p className="mt-1 text-3xl font-semibold text-primary">
-            {formatPrice(coin.market_data.current_price.usd)}
-          </p>
+          <LivePrice key={coin.id} coinId={coin.id} coinSymbol={coin.symbol} initialPrice={coin.market_data.current_price.usd} />
         </div>
       </div>
 
@@ -92,11 +93,11 @@ export default async function CoinDetail({ id }: { id: string }) {
         />
         <StatCard
           label="Circulating Supply"
-          value={`${coin.circulating_supply?.toLocaleString() ?? "—"} ${coin.symbol.toUpperCase()}`}
+          value={`${coin.circulating_supply?.toLocaleString("en-US") ?? "—"} ${coin.symbol.toUpperCase()}`}
         />
       </div>
 
-      <PriceChart coinId={coin.id} isPositive={is24hPositive} initialData={initialChart} />
+      <PriceChart coinId={coin.id} coinSymbol={coin.symbol} isPositive={is24hPositive} initialData={initialChart} />
 
       {coin.description.en && (
         <div className="rounded-xl border border-border bg-surface p-5">

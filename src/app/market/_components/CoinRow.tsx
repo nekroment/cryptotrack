@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { cn, formatPrice, formatLargeNumber, formatPercent } from "@/lib/utils";
+import Link from "next/link";
+
+import { cn, formatLargeNumber, formatPercent, formatPrice } from "@/lib/utils";
 import type { Coin } from "@/types/coin";
 
 interface CoinRowProps {
@@ -15,7 +17,7 @@ export default function CoinRow({ coin }: CoinRowProps) {
         {coin.market_cap_rank}
       </td>
       <td className="px-4 py-3">
-        <div className="flex items-center gap-3">
+        <Link href={`/market/${coin.id}`} className="flex items-center gap-3">
           <Image
             src={coin.image}
             alt={coin.name}
@@ -24,10 +26,10 @@ export default function CoinRow({ coin }: CoinRowProps) {
             className="rounded-full"
           />
           <div>
-            <p className="font-medium text-primary">{coin.name}</p>
+            <p className="font-medium text-primary hover:text-accent transition-colors">{coin.name}</p>
             <p className="text-xs uppercase text-secondary">{coin.symbol}</p>
           </div>
-        </div>
+        </Link>
       </td>
       <td className="px-4 py-3 text-right">
         <p className="font-medium text-primary">

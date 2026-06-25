@@ -1,8 +1,10 @@
 import { Suspense } from "react";
-import { getCoins } from "@/lib/coingecko";
-import CoinRow from "@/components/market/CoinRow";
-import Pagination from "@/components/market/Pagination";
 import type { Metadata } from "next";
+
+import { getCoins } from "@/lib/coingecko";
+
+import CoinRow from "./_components/CoinRow";
+import Pagination from "./_components/Pagination";
 
 const PER_PAGE = 50;
 

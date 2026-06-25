@@ -27,11 +27,12 @@ const TABS = [
 
 interface PriceChartProps {
   coinId: string;
+  coinSymbol: string;
   isPositive: boolean;
   initialData: ChartData | null;
 }
 
-export default function PriceChart({ coinId, isPositive, initialData }: PriceChartProps) {
+export default function PriceChart({ coinId, coinSymbol, isPositive, initialData }: PriceChartProps) {
   const [days, setDays] = useState(7);
   const [chartData, setChartData] = useState<ChartData | null>(initialData);
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,7 @@ export default function PriceChart({ coinId, isPositive, initialData }: PriceCha
     setLoading(true);
     setError(null);
 
-    fetch(`/api/chart/${coinId}?days=${days}`)
+    fetch(`/api/chart/${coinId}?days=${days}&symbol=${coinSymbol}`)
       .then(async (r) => {
         const data = await r.json();
         if (cancelled) return;

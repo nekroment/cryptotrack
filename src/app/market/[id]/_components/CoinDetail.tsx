@@ -3,12 +3,16 @@ import { notFound } from "next/navigation";
 
 import { TrendingDown, TrendingUp } from "lucide-react";
 
-import { getCoinDetail } from "@/lib/coingecko";
+import { getCoinDetail, getCoinChart } from "@/lib/coingecko";
 import { formatLargeNumber, formatPercent, formatPrice } from "@/lib/utils";
 import StatCard from "@/components/ui/StatCard";
+import PriceChart from "./PriceChart";
 
 export default async function CoinDetail({ id }: { id: string }) {
-  const coin = await getCoinDetail(id);
+  const [coin, initialChart] = await Promise.all([
+    getCoinDetail(id),
+    getCoinChart(id, 7).catch(() => null),
+  ]);
   if (!coin) notFound();
 
   const change24h = coin.market_data.price_change_percentage_24h ?? 0;
@@ -91,6 +95,8 @@ export default async function CoinDetail({ id }: { id: string }) {
           value={`${coin.circulating_supply?.toLocaleString() ?? "—"} ${coin.symbol.toUpperCase()}`}
         />
       </div>
+
+      <PriceChart coinId={coin.id} isPositive={is24hPositive} initialData={initialChart} />
 
       {coin.description.en && (
         <div className="rounded-xl border border-border bg-surface p-5">

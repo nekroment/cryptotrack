@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
-import type { Coin, CoinDetail } from "@/types/coin";
+
+import type { Coin, CoinDetail, ChartData } from "@/types/coin";
 
 const BASE = "https://api.coingecko.com/api/v3";
 
@@ -39,6 +40,23 @@ export async function getCoinDetail(id: string): Promise<CoinDetail | null> {
   });
 
   if (res.status === 404) return null;
+  if (res.status === 429) throw new Error("RATE_LIMITED");
+  if (!res.ok) throw new Error(`CoinGecko error: ${res.status}`);
+  return res.json();
+}
+
+export async function getCoinChart(id: string, days = 7): Promise<ChartData> {
+  "use cache";
+  cacheLife("hours");
+
+  const url = new URL(`${BASE}/coins/${id}/market_chart`);
+  url.searchParams.set("vs_currency", "usd");
+  url.searchParams.set("days", String(days));
+
+  const res = await fetch(url.toString(), {
+    headers: { Accept: "application/json" },
+  });
+
   if (!res.ok) throw new Error(`CoinGecko error: ${res.status}`);
   return res.json();
 }

@@ -48,9 +48,7 @@ async function CoinTable({
         {(currentPage - 1) * PER_PAGE + coins.length} by market cap
       </p>
 
-      <div className="overflow-x-auto rounded-xl border border-border">
-        <LiveCoinTable coins={coins} />
-      </div>
+      <LiveCoinTable coins={coins} />
 
       <Pagination
         currentPage={currentPage}

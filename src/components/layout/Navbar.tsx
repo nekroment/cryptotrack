@@ -8,7 +8,7 @@ const navLinks = [
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-md" style={{ paddingTop: "env(safe-area-inset-top)" }}>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/market" className="flex items-center gap-2 text-primary">
           <TrendingUp className="h-5 w-5 text-accent" />

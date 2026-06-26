@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 
 import { TrendingDown, TrendingUp } from "lucide-react";
 
-import { getBinanceChart } from "@/lib/binance";
-import { getCoinDetail, getCoinChart } from "@/lib/coingecko";
 import { formatLargeNumber, formatPercent, formatPrice } from "@/lib/utils";
+import { getCoinDetail, getCoinChart } from "@/lib/coingecko";
+import { getBinanceChart } from "@/lib/binance";
 import StatCard from "@/components/ui/StatCard";
+
+import AddToPortfolioButton from "./AddToPortfolioButton";
 import PriceChart from "./PriceChart";
 import LivePrice from "./LivePrice";
 
@@ -25,26 +27,35 @@ export default async function CoinDetail({ id }: { id: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start gap-4">
-        <Image
-          src={coin.image.large}
-          alt={coin.name}
-          width={56}
-          height={56}
-          className="rounded-full"
-        />
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold text-primary">{coin.name}</h1>
-            <span className="rounded-md bg-surface-2 px-2 py-0.5 text-sm uppercase text-secondary">
-              {coin.symbol}
-            </span>
-            <span className="text-sm text-secondary">
-              #{coin.market_cap_rank}
-            </span>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <Image
+            src={coin.image.large}
+            alt={coin.name}
+            width={56}
+            height={56}
+            className="rounded-full"
+          />
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-bold text-primary">{coin.name}</h1>
+              <span className="rounded-md bg-surface-2 px-2 py-0.5 text-sm uppercase text-secondary">
+                {coin.symbol}
+              </span>
+              <span className="text-sm text-secondary">
+                #{coin.market_cap_rank}
+              </span>
+            </div>
+            <LivePrice key={coin.id} coinId={coin.id} coinSymbol={coin.symbol} initialPrice={coin.market_data.current_price.usd} />
           </div>
-          <LivePrice key={coin.id} coinId={coin.id} coinSymbol={coin.symbol} initialPrice={coin.market_data.current_price.usd} />
         </div>
+        <AddToPortfolioButton
+          coinId={coin.id}
+          symbol={coin.symbol}
+          name={coin.name}
+          image={coin.image.large}
+          currentPrice={coin.market_data.current_price.usd}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -38,3 +38,14 @@ export function formatLargeNumber(value: number): string {
 export function formatPercent(value: number): string {
   return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
 }
+
+export function calcWeightedAvgBuyPrice(
+  existingAmount: number,
+  existingBuyPrice: number,
+  addAmount: number,
+  addPrice: number,
+): { newAmount: number; newAvgPrice: number } {
+  const newAmount = existingAmount + addAmount;
+  const newAvgPrice = (existingAmount * existingBuyPrice + addAmount * addPrice) / newAmount;
+  return { newAmount, newAvgPrice };
+}

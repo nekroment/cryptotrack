@@ -35,8 +35,9 @@ export function formatLargeNumber(value: number): string {
   return `$${value.toLocaleString("en-US")}`;
 }
 
-export function formatPercent(value: number): string {
-  return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+export function formatPercent(value: number | null | undefined): string {
+  const normalized = value ?? 0;
+  return `${normalized >= 0 ? "+" : ""}${normalized.toFixed(2)}%`;
 }
 
 export function calcWeightedAvgBuyPrice(
